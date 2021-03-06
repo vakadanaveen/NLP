@@ -25,13 +25,16 @@ class SentenceSegmentation():
 		segmentedText = None
 
 		#Fill in code here
-		a=re.split('([!\?.;:,"]+)',text)
+		a=re.split('([!?."]+)',text)
 		# Contains the segmented sentences.
 		b = []
 
 		for i in range(0,len(a)-1,2):
 			b.append(a[i].strip()+a[i+1].strip())
+		"""To handle odd number of segments"""
 		if (len(a)%2)==1:b.append(a[-1].strip())
+
+		"""To handle empty strings passed as input"""
 		segmentedText = list(filter(lambda x: True if len(x) > 0 else False, b))
 
 		return segmentedText
