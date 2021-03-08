@@ -28,7 +28,7 @@ class Tokenization():
 		#Fill in code here
 		a=[]
 		for txt in text:
-			l=re.split('([!\?.;:\s,()"])', txt)
+			l=re.split('([-!/\?.;:\s,()"])', txt)
 			l=list(map(lambda x:x.strip(),l))
 			l=list(filter(lambda x: True if len(x) > 0 else False, l))
 			a.append(l)
@@ -61,5 +61,11 @@ class Tokenization():
 
 		return tokenizedText
 t=Tokenization()
-#print(t.naive(["Hello world! how are you?","Hai what is this"]))
-#print(t.pennTreeBank(["Hello world! (how) are you?","where are you ?"]))
+"""print(t.naive(["Hello world! how are you?","Hai what is this"]))
+print(t.pennTreeBank(["Hello world! (how) are you?","where are you ?"]))
+print(t.naive(["Co-education helps cut down costs of running separate schools."]))
+print(t.naive(["It is your choice to work from home/office."]))
+print(t.pennTreeBank(["Co-education helps cut down costs of running separate schools."]))
+print(t.pennTreeBank(["It is your choice to work from home/office."]))
+print(t.pennTreeBank(["https://www.cse.iitm.ac.in/course_details.php?arg=MjI="]))
+print(t.pennTreeBank(["cs20s016@smail.iitm.ac.in"]))"""
