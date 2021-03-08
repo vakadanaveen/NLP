@@ -53,12 +53,13 @@ class Tokenization():
 			A list of lists where each sub-list is a sequence of tokens
 		"""
 
-		tokenizedText = None
+		tokenizedText = []
 
 		#Fill in code here
-		tokenizedText=TreebankWordTokenizer().tokenize(text)
+		for sent in text:
+			tokenizedText.append(TreebankWordTokenizer().tokenize(sent))
 
 		return tokenizedText
 t=Tokenization()
 #print(t.naive(["Hello world! how are you?","Hai what is this"]))
-#print(t.pennTreeBank("Hello world! (how) are you?"))
+#print(t.pennTreeBank(["Hello world! (how) are you?","where are you ?"]))

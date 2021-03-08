@@ -63,7 +63,8 @@ class SentenceSegmentation():
 
 		return segmentedText
 s = SentenceSegmentation()
-'''print(s.naive("Hello world! how are you?"))
+#print(s.naive("Hello world! how are you?"))
+'''
 print(s.punkt("Hello world! how are you?"))
 print('Here naive fails: ',s.naive("Hello world! I have $10.67"))
 print('punkt:',s.punkt("Hello world! I have $10.67"))
