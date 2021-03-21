@@ -68,6 +68,7 @@ class SentenceSegmentation():
 s = SentenceSegmentation()
 
 #print(s.naive('Consider fig 2.3.1. It is in page 36.'))
+'''
 print('top-down performs better: ')
 print('naive: ',s.naive('Rao is vising USA.He will arrive here today.'))
 
@@ -77,3 +78,4 @@ print('punkt performs better: ')
 print('naive: ',s.naive('Mr. Rao is vising USA. He will arrive here today.'))
 
 print('punkt: ',s.punkt('Mr. Rao is vising USA. He will arrive here today.'))
+'''
