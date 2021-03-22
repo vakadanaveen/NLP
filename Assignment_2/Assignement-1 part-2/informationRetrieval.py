@@ -14,6 +14,7 @@ class InformationRetrieval():
 		self.ts=None
 		self.terms=None
 		self.D=None
+		self.did=None
 	def wtv(self,word):
 		word=word.lower()
 		a=[0]*128
@@ -83,6 +84,9 @@ class InformationRetrieval():
 
 		self.index = index
 		self.build_tfidf(docs,docIDs)
+		#print("docIds in buildIndex: ",docIDs)
+		self.did=docIDs
+		#print("in buildIndex", self.did)
 		return
 
 	def csim(self,a,b):
@@ -116,8 +120,22 @@ class InformationRetrieval():
 		doc_IDs_ordered_all = []
 
 		#Fill in code here
+		for query in queries:
+			qv=self.dtv(query)
+			csl = []
+			intermediate_list = []
+			for doc in self.did:
+				#print("In rank: ",self.did, "Query: ",qv)
+				dv=self.tfidf[doc]
+				csl.append((self.csim(qv , dv),doc))
+			csl.sort(reverse=True)
+			for cosval, did in csl:
+				intermediate_list.append(did)
+			doc_IDs_ordered_all.append(intermediate_list)
 
+		#print("csl: ",csl)
 
+		#print("Ranks: ",doc_IDs_ordered_all)
 		return doc_IDs_ordered_all
 
 
@@ -126,11 +144,16 @@ ir=InformationRetrieval()
 d1="Hello world. This is my first information retrieval system."
 d2="This is a good place. It is far away from cities."
 d3="The wind is amazing. I can feel the sweetness of the flowers."
+query= "Flowers are sweet"
 sg=SentenceSegmentation()
 tk= Tokenization()
 crp=[tk.pennTreeBank(sg.punkt(d1)),tk.pennTreeBank(sg.punkt(d2)),tk.pennTreeBank(sg.punkt(d3))]
 ir.buildIndex(crp,[11,12,13])
+queries=[tk.pennTreeBank(sg.punkt(d1)),tk.pennTreeBank(sg.punkt(d2)),tk.pennTreeBank(sg.punkt(d3)),tk.pennTreeBank(sg.punkt(query))]
+
 print(ir.tfidf)
 print(ir.dtv(crp[0]))
 print(ir.csim(ir.tfidf[11],ir.tfidf[12]))
 print(ir.csim(ir.tfidf[12],ir.tfidf[13]))
+
+print(ir.rank(queries))
