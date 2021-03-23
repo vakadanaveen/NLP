@@ -8,7 +8,7 @@ from util import *
 class Evaluation():
 
 
-	def give_docid(self,query_id,qrels):
+	def get_docid(self,query_id,qrels):
 		result = list(filter(lambda query: query['query_num'] == query_id, qrels))
 		doc_id = []
 		for d in result:
@@ -16,6 +16,7 @@ class Evaluation():
 				if k == "id":
 					doc_id.append()
 		print(doc_id)
+		return doc_id
 
 	def precision(self, doc_IDs_ordered, query_id, qrels, k):
 		"""
@@ -43,7 +44,7 @@ class Evaluation():
 		precision = 0
 
 		#Fill in code here
-		doc_id=self.give_docid(query_id, qrels)
+		doc_id=self.get_docid(query_id, qrels)
 		count = 0
 		for element in doc_IDs_ordered:
 			if count <= k:
@@ -82,7 +83,7 @@ class Evaluation():
 		recall = 0
 
 		#Fill in code here
-		doc_id = self.give_docid(query_id, qrels)
+		doc_id = self.get_docid(query_id, qrels)
 		count = 0
 		for element in doc_IDs_ordered:
 			if count <= k:
