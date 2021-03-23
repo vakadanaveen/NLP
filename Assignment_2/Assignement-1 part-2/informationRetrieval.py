@@ -33,7 +33,7 @@ class InformationRetrieval():
 				if w in terms:
 					dv[terms.index(w)] += 1
 		for j in range(len(dv)):
-			dv[j] = dv[j] * math.log(self.D/ len(self.index[terms[j]]))
+			dv[j] = dv[j] * math.log(self.D/ (len(self.index[terms[j]])+1))
 		return dv
 	def build_tfidf(self,docs,docIDs):
 		terms=list(self.index.keys())
@@ -97,7 +97,7 @@ class InformationRetrieval():
 			ma+=a[i]**2
 			mb+=b[i]**2
 		ma,mb=math.sqrt(ma),math.sqrt(mb)
-		return ab/(ma*mb)
+		return ab/((ma*mb)+1e-9)
 
 	def rank(self, queries):
 		"""

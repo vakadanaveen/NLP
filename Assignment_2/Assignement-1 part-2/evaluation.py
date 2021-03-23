@@ -8,6 +8,15 @@ from util import *
 class Evaluation():
 
 
+	def give_docid(self,query_id,qrels):
+		result = list(filter(lambda query: query['query_num'] == query_id, qrels))
+		doc_id = []
+		for d in result:
+			for k, v in d.items():
+				if k == "id":
+					doc_id.append()
+		print(doc_id)
+
 	def precision(self, doc_IDs_ordered, query_id, qrels, k):
 		"""
 		Computation of precision of the Information Retrieval System
@@ -31,10 +40,19 @@ class Evaluation():
 			The recall value as a number between 0 and 1
 		"""
 
-		precision = -1
+		precision = 0
 
 		#Fill in code here
-
+		doc_id=self.give_docid(query_id, qrels)
+		count = 0
+		for element in doc_IDs_ordered:
+			if count <= k:
+				if element in doc_id:
+					precision = precision + 1
+			count = count + 1
+		print(precision)
+		precision = precision / k
+		print("Precision: ",precision)
 		return precision
 
 
@@ -61,10 +79,18 @@ class Evaluation():
 			The recall value as a number between 0 and 1
 		"""
 
-		recall = -1
+		recall = 0
 
 		#Fill in code here
-
+		doc_id = self.give_docid(query_id, qrels)
+		count = 0
+		for element in doc_IDs_ordered:
+			if count <= k:
+				if element in doc_id:
+					recall = recall + 1
+			count = count + 1
+		recall=recall / len(doc_id)
+		print("Recall: ", recall)
 		return recall
 
 
@@ -94,7 +120,9 @@ class Evaluation():
 		fscore = -1
 
 		#Fill in code here
-
+		precision = self.precision(doc_IDs_ordered, query_id, qrels, k)
+		recall = self.recall(doc_IDs_ordered, query_id, qrels, k)
+		fscore = (2*precision*recall)/(precision+recall)
 		return fscore
 
 
@@ -126,5 +154,4 @@ class Evaluation():
 		#Fill in code here
 
 		return MAP
-
 
