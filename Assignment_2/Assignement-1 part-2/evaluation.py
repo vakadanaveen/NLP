@@ -9,8 +9,14 @@ from util import *
 
 
 class Evaluation():
-
-
+	def __init__(self):
+		self.qr=None
+	def build_qr(self,q_rels):
+		qr = defaultdict(list)
+		print(q_rels)
+		for dc in q_rels:
+			qr[int(dc['query_num'])].append(int(dc['id']))
+		self.qr=qr
 	def get_docid(self,query_id,qrels):
 		result = list(filter(lambda query: query['query_num'] == query_id, qrels))
 		doc_id = []
@@ -361,7 +367,18 @@ class Evaluation():
 		avgPrecision = -1
 
 		#Fill in code here
-
+		pdl=query_doc_IDs_ordered
+		rdl=true_doc_IDs
+		for j in range(len(pdl)):
+			if pdl[j] in rdl:
+				pdl[j] = 1
+			else:
+				pdl[j] = 0
+		ap = 0
+		for j in range(len(pdl)):
+			ap += (sum(pdl[:(j + 1)]) * 1.0 / (j + 1))
+		ap /= len(pdl)
+		avgPrecision=ap
 		return avgPrecision
 
 
@@ -393,6 +410,29 @@ class Evaluation():
 		meanAveragePrecision = -1
 
 		#Fill in code here
+		MAP = 0
+		# preprocess q_rels
+		self.build_qr(q_rels)
+		qr = self.qr
+
+		for i in range(len(query_ids)):
+			# print(len(doc_IDs_ordered_all),len(query_ids))
+			pdl = doc_IDs_ordered[i][:k]
+			rdl = qr[int(query_ids[i])]
+			#print(pdl[:10], rdl)
+			for j in range(len(pdl)):
+				if pdl[j] in rdl:
+					pdl[j] = 1
+				else:
+					pdl[j] = 0
+			ap = 0
+			for j in range(len(pdl)):
+				ap += (sum(pdl[:(j + 1)]) * 1.0 / (j + 1))
+			ap /= len(pdl)
+			MAP += ap
+		MAP /= len(query_ids)
+		meanAveragePrecision=MAP
+
 
 		return meanAveragePrecision
 
