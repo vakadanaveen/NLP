@@ -87,6 +87,7 @@ class InformationRetrieval():
 		#print("docIds in buildIndex: ",docIDs)
 		self.did=docIDs
 		#print("in buildIndex", self.did)
+		print("index build successfully !")
 		return
 
 	def csim(self,a,b):
@@ -120,7 +121,9 @@ class InformationRetrieval():
 		doc_IDs_ordered_all = []
 
 		#Fill in code here
+		c=0
 		for query in queries:
+			c+=1
 			qv=self.dtv(query)
 			csl = []
 			intermediate_list = []
@@ -132,7 +135,8 @@ class InformationRetrieval():
 			for cosval, did in csl:
 				intermediate_list.append(did)
 			doc_IDs_ordered_all.append(intermediate_list)
-
+			if (c%25)==0:
+				print("processed "+str(c)+" queries.")
 		#print("csl: ",csl)
 
 		#print("Ranks: ",doc_IDs_ordered_all)
