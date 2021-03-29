@@ -140,20 +140,20 @@ class InformationRetrieval():
 
 
 
-ir=InformationRetrieval()
-d1="Hello world. This is my first information retrieval system."
-d2="This is a good place. It is far away from cities."
-d3="The wind is amazing. I can feel the sweetness of the flowers."
-query= "Flowers are sweet"
-sg=SentenceSegmentation()
-tk= Tokenization()
-crp=[tk.pennTreeBank(sg.punkt(d1)),tk.pennTreeBank(sg.punkt(d2)),tk.pennTreeBank(sg.punkt(d3))]
-ir.buildIndex(crp,[11,12,13])
-queries=[tk.pennTreeBank(sg.punkt(d1)),tk.pennTreeBank(sg.punkt(d2)),tk.pennTreeBank(sg.punkt(d3)),tk.pennTreeBank(sg.punkt(query))]
-
-print(ir.tfidf)
-print(ir.dtv(crp[0]))
-print(ir.csim(ir.tfidf[11],ir.tfidf[12]))
-print(ir.csim(ir.tfidf[12],ir.tfidf[13]))
-
-print(ir.rank(queries))
+# ir=InformationRetrieval()
+# d1="Hello world. This is my first information retrieval system."
+# d2="This is a good place. It is far away from cities."
+# d3="The wind is amazing. I can feel the sweetness of the flowers."
+# query= "Flowers are sweet"
+# sg=SentenceSegmentation()
+# tk= Tokenization()
+# crp=[tk.pennTreeBank(sg.punkt(d1)),tk.pennTreeBank(sg.punkt(d2)),tk.pennTreeBank(sg.punkt(d3))]
+# ir.buildIndex(crp,[11,12,13])
+# queries=[tk.pennTreeBank(sg.punkt(d1)),tk.pennTreeBank(sg.punkt(d2)),tk.pennTreeBank(sg.punkt(d3)),tk.pennTreeBank(sg.punkt(query))]
+#
+# print(ir.tfidf)
+# print(ir.dtv(crp[0]))
+# print(ir.csim(ir.tfidf[11],ir.tfidf[12]))
+# print(ir.csim(ir.tfidf[12],ir.tfidf[13]))
+#
+# print(ir.rank(queries))
