@@ -28,13 +28,23 @@ class Evaluation():
 		return doc_id
 
 	def get_rel_score(self, query_id,element, qrels):
-		self.build_qr(qrels)
-		for k, v in self.qr.items():
-				if k == query_id:
-					rel_score = v
+		result = list(filter(lambda query: query['query_num'] == str(query_id), qrels))
+		doc_id = []
+		rel_score = []
+		for d in result:
+			for k, v in d.items():
+				if k == "id":
+					doc_id.append(v)
+				if k == "position":
+					rel_score.append(v)
+
+		# self.build_qr(qrels)
+		# for k, v in self.qr.items():
+		# 		if k == query_id:
+		# 			rel_score = v
 
 		try:
-			relavant_score = rel_score.index(element)+1
+			relavant_score = rel_score[doc_id.index(element)]
 		except:
 			relavant_score = 4
 		print("Relavant Score: ",relavant_score)
@@ -320,7 +330,7 @@ class Evaluation():
 		count = 1
 		for element in query_doc_IDs_ordered:
 			if count <= k:
-				if element in true_doc_IDs:
+				if str(element) in true_doc_IDs:
 					# print("i= ",count)
 					DCG = DCG + (self.get_rel_score(query_id, element, qrels) / math.log(count + 1))
 				count = count + 1
