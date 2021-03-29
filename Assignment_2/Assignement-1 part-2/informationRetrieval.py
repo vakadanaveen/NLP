@@ -87,7 +87,7 @@ class InformationRetrieval():
 		#print("docIds in buildIndex: ",docIDs)
 		self.did=docIDs
 		#print("in buildIndex", self.did)
-		print("index build successfully !")
+		print("index built successfully !")
 		return
 
 	def csim(self,a,b):
@@ -142,7 +142,7 @@ class InformationRetrieval():
 		#print("Ranks: ",doc_IDs_ordered_all)
 		return doc_IDs_ordered_all
 
-
+'''
 
 ir=InformationRetrieval()
 d1="Hello world. This is my first information retrieval system."
@@ -161,3 +161,4 @@ print(ir.csim(ir.tfidf[11],ir.tfidf[12]))
 print(ir.csim(ir.tfidf[12],ir.tfidf[13]))
 
 print(ir.rank(queries))
+'''
