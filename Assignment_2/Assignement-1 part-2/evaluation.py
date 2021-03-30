@@ -68,10 +68,13 @@ class Evaluation():
 		#Fill in code here
 		count = 1
 		for element in query_doc_IDs_ordered:
+			# Find the number of relevant documents in top k results
 			if count <= k:
+				# if the document is present in the relevant document list then increment precision count by 1.
 				if str(element) in true_doc_IDs:
 					precision = precision + 1
 			count = count + 1
+		# Dividing precision by number of documents retrieved at rank 'k'
 		precision = precision / k
 
 		return precision
@@ -111,6 +114,7 @@ class Evaluation():
 			doc_id = self.get_docid(query_ids[n], qrels)
 			sum = sum + self.queryPrecision(list, query_ids[n], doc_id, k)
 			n = n + 1
+		# Finding the average of all precision values corresponding to different queries
 		meanPrecision = sum / len(doc_IDs_ordered)
 		return meanPrecision
 
@@ -143,10 +147,13 @@ class Evaluation():
 		#Fill in code here
 		count = 1
 		for element in query_doc_IDs_ordered:
+			# Find the number of relevant documents in top k results
 			if count <= k:
+				# if the document is present in the relevant document list then increment recall count by 1.
 				if str(element) in true_doc_IDs:
 					recall = recall + 1
 			count = count + 1
+		# Dividing recall by number of relevant documents
 		recall = recall / len(true_doc_IDs)
 
 		return recall
@@ -186,6 +193,7 @@ class Evaluation():
 			doc_id = self.get_docid(query_ids[n], qrels)
 			sum = sum + self.queryRecall(list,query_ids[n],doc_id,k)
 			n = n + 1
+		# Finding the average of all recall values corresponding to different queries
 		meanRecall = sum / len(doc_IDs_ordered)
 		return meanRecall
 
@@ -217,6 +225,7 @@ class Evaluation():
 		#Fill in code here
 		precision = self.queryPrecision(query_doc_IDs_ordered, query_id, true_doc_IDs, k)
 		recall = self.queryRecall(query_doc_IDs_ordered, query_id, true_doc_IDs, k)
+		# To prevent division by zero error
 		fscore = (2 * precision * recall) / (precision + recall + 1e-11)
 
 		return fscore
@@ -255,6 +264,7 @@ class Evaluation():
 			doc_id = self.get_docid(query_ids[n], qrels)
 			sum = sum + self.queryFscore(list, query_ids[n], doc_id, k)
 			n = n + 1
+		# Finding the average of all fscore values corresponding to different queries
 		meanFscore = sum / len(doc_IDs_ordered)
 		return meanFscore
 
@@ -300,7 +310,8 @@ class Evaluation():
 			if count <= k:
 				IDCG = IDCG + (self.get_rel_score(query_id,element,qrels) / math.log2(count + 1))
 				count = count + 1
-		nDCG = DCG / (IDCG)
+		# To prevent division by zero error
+		nDCG = DCG / (IDCG + 1e-11)
 		return nDCG
 
 
@@ -339,6 +350,7 @@ class Evaluation():
 			nDCG=self.queryNDCG(list, query_ids[n], true_doc_IDs, k)
 			sum = sum + nDCG
 			n = n + 1
+		# Finding the average of all nDCG values corresponding to different queries
 		meanNDCG = sum/len(doc_IDs_ordered)
 		return meanNDCG
 
