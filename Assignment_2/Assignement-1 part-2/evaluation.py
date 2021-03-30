@@ -13,7 +13,6 @@ class Evaluation():
 		self.qr=None
 	def build_qr(self,q_rels):
 		qr = defaultdict(list)
-		#print(q_rels)
 		for dc in q_rels:
 			qr[int(dc['query_num'])].append(int(dc['id']))
 		self.qr=qr
@@ -24,7 +23,6 @@ class Evaluation():
 			for k, v in d.items():
 				if k == "id":
 					doc_id.append(v)
-		#print(doc_id)
 		return doc_id
 
 	def get_rel_score(self, query_id,element, qrels):
@@ -36,18 +34,10 @@ class Evaluation():
 				if k == "id":
 					doc_id.append(v)
 				if k == "position":
-					rel_score.append(v)
+					# Measuring the relevance score in a scale of 0-3 where integer with higher value has greater relevance
+					rel_score.append(4-int(v))
 
-		# self.build_qr(qrels)
-		# for k, v in self.qr.items():
-		# 		if k == query_id:
-		# 			rel_score = v
-
-		try:
-			relavant_score = rel_score[doc_id.index(element)]
-		except:
-			relavant_score = 4
-		print("Relavant Score: ",relavant_score)
+		relavant_score = rel_score[doc_id.index(element)]
 		return relavant_score
 
 	def queryPrecision(self, query_doc_IDs_ordered, query_id, true_doc_IDs, k):
@@ -77,20 +67,12 @@ class Evaluation():
 
 		#Fill in code here
 		count = 1
-		# print("Inside query PRecision")
-		# print("true Doc IDs: ",true_doc_IDs)
-		# print("Predicted order of relevance to query id ",query_id,"is: ",query_doc_IDs_ordered)
 		for element in query_doc_IDs_ordered:
 			if count <= k:
-				# print("Count: ",count)
-				# print("Doc id in Predicted list: ",element)
 				if str(element) in true_doc_IDs:
-					# print("Matched!!")
 					precision = precision + 1
 			count = count + 1
-		#print(precision)
 		precision = precision / k
-		# print("Precision: ",precision)
 
 		return precision
 
@@ -125,14 +107,11 @@ class Evaluation():
 		#Fill in code here
 		n = 0
 		sum = 0
-		# print("Inside Mean Precision")
 		for list in doc_IDs_ordered:
 			doc_id = self.get_docid(query_ids[n], qrels)
-			#print("K= ",k)
 			sum = sum + self.queryPrecision(list, query_ids[n], doc_id, k)
 			n = n + 1
 		meanPrecision = sum / len(doc_IDs_ordered)
-		# print("sum: ",sum,"n= ",n,"Mean Precision calculated: ",meanPrecision)
 		return meanPrecision
 
 
@@ -163,20 +142,12 @@ class Evaluation():
 
 		#Fill in code here
 		count = 1
-		# print("Inside query Recall")
-		# print("true Doc IDs: ", true_doc_IDs)
-		# print("Predicted order of relevance to query id ", query_id, "is: ", query_doc_IDs_ordered)
 		for element in query_doc_IDs_ordered:
 			if count <= k:
-				# print("Count: " + str(count))
-				# print("Doc id in Predicted list: ", element)
 				if str(element) in true_doc_IDs:
-					# print("Matched!!")
 					recall = recall + 1
 			count = count + 1
-		# print("len(true Doc ids): ",len(true_doc_IDs))
 		recall = recall / len(true_doc_IDs)
-		# print("Recall: ", recall)
 
 		return recall
 
@@ -213,11 +184,9 @@ class Evaluation():
 		sum = 0
 		for list in doc_IDs_ordered:
 			doc_id = self.get_docid(query_ids[n], qrels)
-			# print("K= ",k)
 			sum = sum + self.queryRecall(list,query_ids[n],doc_id,k)
 			n = n + 1
 		meanRecall = sum / len(doc_IDs_ordered)
-		#print("sum=",sum,"n= ",n,"Mean Recall Calculated: ",meanRecall)
 		return meanRecall
 
 	def queryFscore(self, query_doc_IDs_ordered, query_id, true_doc_IDs, k):
@@ -284,11 +253,9 @@ class Evaluation():
 		sum = 0
 		for list in doc_IDs_ordered:
 			doc_id = self.get_docid(query_ids[n], qrels)
-			# print("K= ",k)
 			sum = sum + self.queryFscore(list, query_ids[n], doc_id, k)
 			n = n + 1
 		meanFscore = sum / len(doc_IDs_ordered)
-		#print("sum",sum,"n= ",n,"Mean fscore calculated: ",meanFscore)
 		return meanFscore
 
 
@@ -321,28 +288,19 @@ class Evaluation():
 		DCG = 0
 		IDCG = 0
 		path=os.path.join(os.getcwd(),"cranfield","cran_qrels.json")
-		#print("IDs of documents in their predicted order: ",query_doc_IDs_ordered)
-		#print("Path: ",path)
 		qrels = json.load(open(path, 'r'))[:]
-		# doc_id = self.get_docid(query_id, qrels)
-		#print("IDs of documents in their actual order: ", true_doc_IDs)
-		print("CALCULATING DCG: ")
 		count = 1
 		for element in query_doc_IDs_ordered:
 			if count <= k:
 				if str(element) in true_doc_IDs:
-					# print("i= ",count)
-					DCG = DCG + (self.get_rel_score(query_id, element, qrels) / math.log(count + 1))
+					DCG = DCG + (self.get_rel_score(query_id, str(element), qrels) / math.log2(query_doc_IDs_ordered.index(element) + 2))
 				count = count + 1
 		count = 1
-		print("CALCULATING IDCG: ")
 		for element in true_doc_IDs:
-			# print("i= ", count)
-			IDCG = IDCG + (self.get_rel_score(query_id,element,qrels) / math.log(count + 1))
-			count = count + 1
-		print("DCG: ",DCG,"IDCG: ",IDCG)
-		nDCG = DCG / (IDCG + 1e-11)
-		print(nDCG)
+			if count <= k:
+				IDCG = IDCG + (self.get_rel_score(query_id,element,qrels) / math.log2(count + 1))
+				count = count + 1
+		nDCG = DCG / (IDCG)
 		return nDCG
 
 
@@ -380,7 +338,6 @@ class Evaluation():
 			true_doc_IDs = self.get_docid(query_ids[n], qrels)
 			nDCG=self.queryNDCG(list, query_ids[n], true_doc_IDs, k)
 			sum = sum + nDCG
-			#print("nDCG for k= ",k,nDCG)
 			n = n + 1
 		meanNDCG = sum/len(doc_IDs_ordered)
 		return meanNDCG
