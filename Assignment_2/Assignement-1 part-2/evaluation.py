@@ -74,8 +74,11 @@ class Evaluation():
 				if str(element) in true_doc_IDs:
 					precision = precision + 1
 			count = count + 1
-		# Dividing precision by number of documents retrieved at rank 'k'
-		precision = precision / k
+		if k== 0:
+			precision = 1
+		else:
+			# Dividing precision by number of documents retrieved at rank 'k'
+			precision = precision / k
 
 		return precision
 
@@ -114,8 +117,11 @@ class Evaluation():
 			doc_id = self.get_docid(query_ids[n], qrels)
 			sum = sum + self.queryPrecision(list, query_ids[n], doc_id, k)
 			n = n + 1
-		# Finding the average of all precision values corresponding to different queries
-		meanPrecision = sum / len(doc_IDs_ordered)
+		if len(doc_IDs_ordered) == 0:
+			meanPrecision = 1
+		else:
+			# Finding the average of all precision values corresponding to different queries
+			meanPrecision = sum / len(doc_IDs_ordered)
 		return meanPrecision
 
 
@@ -153,8 +159,11 @@ class Evaluation():
 				if str(element) in true_doc_IDs:
 					recall = recall + 1
 			count = count + 1
-		# Dividing recall by number of relevant documents
-		recall = recall / len(true_doc_IDs)
+		if len(true_doc_IDs) == 0:
+			recall = 1
+		else:
+			# Dividing recall by number of relevant documents
+			recall = recall / len(true_doc_IDs)
 
 		return recall
 
@@ -193,8 +202,11 @@ class Evaluation():
 			doc_id = self.get_docid(query_ids[n], qrels)
 			sum = sum + self.queryRecall(list,query_ids[n],doc_id,k)
 			n = n + 1
-		# Finding the average of all recall values corresponding to different queries
-		meanRecall = sum / len(doc_IDs_ordered)
+		if len(doc_IDs_ordered) == 0:
+			meanRecall = 1
+		else:
+			# Finding the average of all recall values corresponding to different queries
+			meanRecall = sum / len(doc_IDs_ordered)
 		return meanRecall
 
 	def queryFscore(self, query_doc_IDs_ordered, query_id, true_doc_IDs, k):
@@ -225,8 +237,11 @@ class Evaluation():
 		#Fill in code here
 		precision = self.queryPrecision(query_doc_IDs_ordered, query_id, true_doc_IDs, k)
 		recall = self.queryRecall(query_doc_IDs_ordered, query_id, true_doc_IDs, k)
-		# To prevent division by zero error
-		fscore = (2 * precision * recall) / (precision + recall + 1e-11)
+		# This will happen when there are no relevant documents in top k results
+		if precision + recall == 0:
+			fscore = 0
+		else:
+			fscore = (2 * precision * recall) / (precision + recall)
 
 		return fscore
 
@@ -310,8 +325,11 @@ class Evaluation():
 			if count <= k:
 				IDCG = IDCG + (self.get_rel_score(query_id,element,qrels) / math.log2(count + 1))
 				count = count + 1
-		# To prevent division by zero error
-		nDCG = DCG / (IDCG + 1e-11)
+		# When there are no documents in the ideally relevant to the query then there are no documents to display.
+		# Thus the relevance score is 1.
+		if IDCG == 0:
+			IDCG = 1
+		nDCG = DCG / IDCG
 		return nDCG
 
 
