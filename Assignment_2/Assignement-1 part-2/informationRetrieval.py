@@ -16,6 +16,7 @@ class InformationRetrieval():
 		self.D=None
 		self.did=None
 	def wtv(self,word):
+		#This function returns the vector representation of a given word
 		word=word.lower()
 		a=[0]*128
 		for x in word:
@@ -25,6 +26,7 @@ class InformationRetrieval():
 			vs+=str(x)
 		return vs
 	def dtv(self,doc):
+		#This function returns the vector representation of a given document
 		dv=[0]*self.ts
 		terms=self.terms
 		for s in doc:
@@ -36,6 +38,7 @@ class InformationRetrieval():
 			dv[j] = dv[j] * math.log(self.D/ (len(self.index[terms[j]])+1))
 		return dv
 	def build_tfidf(self,docs,docIDs):
+		#This function builds the tfidf dictionary which represents the vector model
 		terms=list(self.index.keys())
 		self.ts=len(terms)
 		self.terms=terms
@@ -91,6 +94,7 @@ class InformationRetrieval():
 		return
 
 	def csim(self,a,b):
+		#This functioin computes cosine similarity
 		ab=0
 		for i in range(len(a)):ab+=a[i]*b[i]
 		ma,mb=0,0

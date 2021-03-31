@@ -10,8 +10,10 @@ from collections import defaultdict
 
 class Evaluation():
 	def __init__(self):
-		self.qr=None
+		self.qr=None #This dictionary holds the list of relevant documents for a particular query
 	def build_qr(self,q_rels):
+		#This function populates the self.qr dictionary which has relevant document lists as values and
+		#query ids as keys of the dictionary
 		qr = defaultdict(list)
 		for dc in q_rels:
 			qr[int(dc['query_num'])].append(int(dc['id']))
