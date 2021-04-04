@@ -327,10 +327,10 @@ class Evaluation():
 			if count <= k:
 				IDCG = IDCG + (self.get_rel_score(query_id,element,qrels) / math.log2(count + 1))
 				count = count + 1
-		# When there are no documents in the ideally relevant to the query then there are no documents to display.
+		# When there are no documents ideally relevant to the query then there are no documents to display.
 		# Thus the relevance score is 1.
 		if IDCG == 0:
-			IDCG = 1
+			return 0
 		nDCG = DCG / IDCG
 		return nDCG
 
