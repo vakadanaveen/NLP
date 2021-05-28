@@ -319,6 +319,8 @@ class Evaluation():
 		count = 1
 		for element in query_doc_IDs_ordered:
 			if count <= k:
+				# if a document is not presented in true_doc_IDs then it means that the document is irrelevant so its relevance score is 0. 
+				# Hence we will ignore such documents during DCG calculation.
 				if str(element) in true_doc_IDs:
 					DCG = DCG + (self.get_rel_score(query_id, str(element), qrels) / math.log2(query_doc_IDs_ordered.index(element) + 2))
 				count = count + 1
@@ -366,7 +368,12 @@ class Evaluation():
 		n = 0
 		sum = 0
 		for list in doc_IDs_ordered:
-			true_doc_IDs = self.get_docid(query_ids[n], qrels)
+			result = list(filter(lambda query: query['query_num'] == str(query_ids[n]), qrels))
+			true_doc_IDs = []
+			for d in result:
+				for ky, val in d.items():
+					if ky == "id":
+						true_doc_IDs.append(val)
 			nDCG=self.queryNDCG(list, query_ids[n], true_doc_IDs, k)
 			sum = sum + nDCG
 			n = n + 1
