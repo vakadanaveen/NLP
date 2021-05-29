@@ -367,7 +367,7 @@ class Evaluation():
 		#Fill in code here
 		n = 0
 		sum = 0
-		# We sort qrels in decreasing order of relevance. We are doing this to get true_doc_IDs in decreasing prder of relevance.
+		# We sort qrels in non-increasing order of relevance. We are doing this to get true_doc_IDs in non-increasing order of relevance.
 		qrels = sorted(qrels, key=lambda i: (i['position']))
 		for list in doc_IDs_ordered:
 			result = list(filter(lambda query: query['query_num'] == str(query_ids[n]), qrels))
